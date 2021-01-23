@@ -3,9 +3,14 @@ package com.udacity.project4.locationreminders.geofence
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
+import com.udacity.project4.R
 import com.udacity.project4.locationreminders.savereminder.SaveReminderFragment
 import com.udacity.project4.locationreminders.savereminder.SaveReminderFragment.Companion.ACTION_GEOFENCE_EVENT
+import timber.log.Timber
 
 /**
  * Triggered by the Geofence.  Since we can have many Geofences at once, we pull the request
@@ -19,10 +24,41 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderFragment.
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-    if(intent.action == ACTION_GEOFENCE_EVENT) {
-        val geofencingEvent = GeofencingEvent.fromIntent(intent)
-    }
-//TODO: implement the onReceive method to receive the geofencing events at the background
-
+        if (intent.action == ACTION_GEOFENCE_EVENT) {
+            GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
+        }
     }
 }
+
+/*            if (geofencingEvent.hasError()) {
+                val errorMessage = errorMessage(context, geofencingEvent.errorCode)
+                Timber.e(errorMessage)
+                return
+            }
+
+            if (geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+                val fenceId = when {
+                    geofencingEvent.triggeringGeofences.isNotEmpty() ->
+                        geofencingEvent.triggeringGeofences[0].requestId
+                    else -> {
+                        Timber.e("No Geofence Trigger Found! Abort mission!")
+                        return
+                    }
+                }
+            }*/
+
+/*private fun errorMessage(context: Context, errorCode: Int): String {
+    val resources = context.resources
+    return when (errorCode) {
+        GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE -> resources.getString(
+            R.string.geofence_not_available
+        )
+        GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES -> resources.getString(
+            R.string.geofence_too_many_geofences
+        )
+        GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS -> resources.getString(
+            R.string.geofence_too_many_pending_intents
+        )
+        else -> resources.getString(R.string.geofence_unknown_error)
+    }
+}*/
