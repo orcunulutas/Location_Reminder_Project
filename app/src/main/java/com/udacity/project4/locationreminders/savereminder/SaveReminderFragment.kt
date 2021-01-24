@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
@@ -84,15 +85,17 @@ class SaveReminderFragment : BaseFragment() {
                 longitude
             )
 
-            _viewModel.validateAndSaveReminder(reminder)
-
-            addGeofence(reminder)
-
-            findNavController().navigate(R.id.action_saveReminderFragment_to_reminderListFragment)
-
-
-//            TODO: use the user entered reminder details to:
-//             1) add a geofencing request
+            if(reminder.latitude != null && reminder.longitude != null) {
+                _viewModel.validateAndSaveReminder(reminder)
+                addGeofence(reminder)
+                _viewModel.navigate.observe(viewLifecycleOwner, Observer { value ->
+                    if(value == true) {
+                        findNavController().navigate(R.id.action_saveReminderFragment_to_reminderListFragment)
+                    }
+                })
+            } else {
+                Toast.makeText(requireActivity(), "Please choose a location for the reminder!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -113,18 +116,10 @@ class SaveReminderFragment : BaseFragment() {
         //Permissions were already accepted at this point
         geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
             addOnSuccessListener {
-                Toast.makeText(
-                    requireContext(), R.string.geofences_added,
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-                Timber.e(geofence.requestId)
+                Timber.d("Geofence added with id: $geofence.requestId")
             }
             addOnFailureListener {
-                Toast.makeText(
-                    requireContext(), R.string.geofences_not_added,
-                    Toast.LENGTH_SHORT
-                ).show()
+                Timber.d("Geofence not added")
                 if ((it.message != null)) {
                     Timber.w(it.message!!)
                 }

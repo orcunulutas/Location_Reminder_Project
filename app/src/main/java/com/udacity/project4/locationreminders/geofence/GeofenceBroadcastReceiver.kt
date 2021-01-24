@@ -29,36 +29,3 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         }
     }
 }
-
-/*            if (geofencingEvent.hasError()) {
-                val errorMessage = errorMessage(context, geofencingEvent.errorCode)
-                Timber.e(errorMessage)
-                return
-            }
-
-            if (geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-                val fenceId = when {
-                    geofencingEvent.triggeringGeofences.isNotEmpty() ->
-                        geofencingEvent.triggeringGeofences[0].requestId
-                    else -> {
-                        Timber.e("No Geofence Trigger Found! Abort mission!")
-                        return
-                    }
-                }
-            }*/
-
-/*private fun errorMessage(context: Context, errorCode: Int): String {
-    val resources = context.resources
-    return when (errorCode) {
-        GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE -> resources.getString(
-            R.string.geofence_not_available
-        )
-        GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES -> resources.getString(
-            R.string.geofence_too_many_geofences
-        )
-        GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS -> resources.getString(
-            R.string.geofence_too_many_pending_intents
-        )
-        else -> resources.getString(R.string.geofence_unknown_error)
-    }
-}*/
