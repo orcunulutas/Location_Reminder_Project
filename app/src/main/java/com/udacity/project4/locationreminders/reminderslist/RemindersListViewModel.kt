@@ -9,6 +9,7 @@ import com.udacity.project4.base.BaseViewModel
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
+import com.udacity.project4.locationreminders.data.local.RemindersLocalRepository
 import kotlinx.coroutines.launch
 
 class RemindersListViewModel(app: Application, private val dataSource: ReminderDataSource) : BaseViewModel(app) {
@@ -56,17 +57,4 @@ class RemindersListViewModel(app: Application, private val dataSource: ReminderD
     private fun invalidateShowNoData() {
         showNoData.value = remindersList.value == null || remindersList.value!!.isEmpty()
     }
-
-    enum class AuthenticationState {
-        AUTHENTICATED, UNAUTHENTICATED
-    }
-
-    val authenticationState = FirebaseUserLiveData().map { user ->
-        if(user != null) {
-            AuthenticationState.AUTHENTICATED
-        } else {
-            AuthenticationState.UNAUTHENTICATED
-        }
-    }
-
 }

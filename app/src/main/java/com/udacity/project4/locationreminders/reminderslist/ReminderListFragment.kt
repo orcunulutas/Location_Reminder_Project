@@ -24,12 +24,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.authentication.AuthenticationActivity
+import com.udacity.project4.authentication.AuthenticationViewModel
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentRemindersBinding
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import com.udacity.project4.utils.setTitle
 import com.udacity.project4.utils.setup
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -39,10 +41,11 @@ private const val REQUEST_TURN_DEVICE_LOCATION_ON = 30
 
 class ReminderListFragment : BaseFragment() {
 
-    private val runningQOrLater = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
+    private val runningQOrLater = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
     //use Koin to retrieve the ViewModel instance
     override val _viewModel: RemindersListViewModel by viewModel()
+    private val _viewModelAuthentication: AuthenticationViewModel by inject()
     private lateinit var binding: FragmentRemindersBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -56,8 +59,8 @@ class ReminderListFragment : BaseFragment() {
 
         binding.refreshLayout.setOnRefreshListener { _viewModel.loadReminders() }
 
-        _viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authState ->
-            if(authState == RemindersListViewModel.AuthenticationState.UNAUTHENTICATED) {
+        _viewModelAuthentication.authenticationState.observe(viewLifecycleOwner, Observer { authState ->
+            if(authState == AuthenticationViewModel.AuthenticationState.UNAUTHENTICATED) {
                 val intent = Intent(requireActivity(), AuthenticationActivity::class.java)
                 startActivity(intent)
                 requireActivity().finish()
