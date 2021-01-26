@@ -32,7 +32,6 @@ import org.mockito.Mockito.verify
 class ReminderListFragmentTest {
 
     private lateinit var repository: RemindersLocalRepository
-    private lateinit var database: RemindersDatabase
 
     @Before
     fun initRepository() {
