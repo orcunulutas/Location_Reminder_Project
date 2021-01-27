@@ -44,4 +44,8 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="geofences_added">Geofence added.</string>
+    <string name="reminder">Reminder:</string>
+    <string name="title">Title:</string>
+    <string name="location">Location:</string>
+    <string name="close">Close</string>
 </resources>
