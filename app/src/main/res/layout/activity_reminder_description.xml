@@ -10,24 +10,97 @@
             type="com.udacity.project4.locationreminders.reminderslist.ReminderDataItem" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         tools:context=".locationreminders.ReminderDescriptionActivity">
-        <!--TODO: add the design of the reminder details-->
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/reminder_title"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Reminder Details"
-            android:textSize="@dimen/text_size_large"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/reminder_description"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_big"
+            android:text="@string/reminder"
+            app:layout_constraintStart_toStartOf="@+id/reminder_title"
+            app:layout_constraintTop_toBottomOf="@+id/reminder_title" />
+
+        <TextView
+            android:id="@+id/reminder_location"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_big"
+            android:text="@string/location"
+            app:layout_constraintStart_toStartOf="@+id/reminder_description"
+            app:layout_constraintTop_toBottomOf="@+id/reminder_description" />
+
+        <TextView
+            android:id="@+id/reminder_title_detail"
+            style="@style/TextAppearance.Text.Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:text="@{reminderDataItem.title}"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_title"
+            app:layout_constraintStart_toEndOf="@+id/reminder_title"
+            tools:text="Shopping" />
+
+        <TextView
+            android:id="@+id/reminder_description_detail"
+            style="@style/TextAppearance.Text.Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:text="@{reminderDataItem.description}"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_description"
+            app:layout_constraintStart_toEndOf="@+id/reminder_description"
+            tools:text="Buy milk" />
+
+        <TextView
+            android:id="@+id/reminder_location_detail"
+            style="@style/TextAppearance.Text.Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:text="@{reminderDataItem.location}"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_location"
+            app:layout_constraintStart_toEndOf="@+id/reminder_location"
+            app:layout_constraintTop_toTopOf="@+id/reminder_location"
+            tools:text="Supermarket" />
+
+        <Button
+            android:id="@+id/button_close"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:text="@string/close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
