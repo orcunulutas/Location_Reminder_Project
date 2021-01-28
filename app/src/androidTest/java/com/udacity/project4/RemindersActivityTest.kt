@@ -5,8 +5,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
@@ -14,6 +13,8 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import com.udacity.project4.authentication.AuthenticationViewModel
 import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
@@ -125,10 +126,14 @@ class RemindersActivityTest :
 
         //Set a location in SelectLocationFragment
         onView(withId(R.id.map)).perform(click())
-        onView(withText("Confirm")).inRoot(isDialog()).check(matches(isDisplayed())).perform(click())
+        onView(withText("Confirm"))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
+            .perform(click())
+
 
         //Change title and description in SaveReminderFragment
-        onView(withId(R.id.reminderTitle)).perform(replaceText("Test"))
+        onView(withId(R.id.reminderTitle)).perform(typeText("Test"), closeSoftKeyboard())
         onView(withId(R.id.reminderDescription)).perform(replaceText("Description Test"))
         onView(withId(R.id.saveReminder)).perform(click())
 

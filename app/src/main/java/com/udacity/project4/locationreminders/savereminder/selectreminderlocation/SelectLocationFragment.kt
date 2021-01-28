@@ -56,12 +56,15 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    private fun onLocationSelected(poi: PointOfInterest) {
-        _viewModel.selectedPOI.value = poi
-        _viewModel.longitude.value = poi.latLng.longitude
-        _viewModel.latitude.value = poi.latLng.latitude
-        _viewModel.reminderSelectedLocationStr.value = poi.name
-        findNavController().navigate(R.id.action_selectLocationFragment_to_saveReminderFragment)
+    private fun onLocationSelected(poi: PointOfInterest?): Boolean {
+        if(poi != null) {
+            _viewModel.selectedPOI.value = poi
+            _viewModel.longitude.value = poi.latLng.longitude
+            _viewModel.latitude.value = poi.latLng.latitude
+            _viewModel.reminderSelectedLocationStr.value = poi.name
+            return true
+        }
+        return false
     }
 
 
@@ -126,8 +129,11 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             .setPositiveButton(
                 getString(R.string.confirm)
             ) { dialog, _ ->
-                onLocationSelected(poi)
-                dialog?.dismiss()
+                val locationSelected = onLocationSelected(poi)
+                if(locationSelected) {
+                    findNavController().navigateUp()
+                    dialog.dismiss()
+                }
             }
             .setNegativeButton(
                 getString(R.string.cancel)
