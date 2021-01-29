@@ -24,6 +24,7 @@ import com.udacity.project4.locationreminders.reminderslist.RemindersListViewMod
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorActivity
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -118,7 +119,7 @@ class RemindersActivityTest :
 
         //RemindersListFragment press FAB to save new Reminder
         onView(withId(R.id.noDataTextView))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .check(matches(isDisplayed()))
         onView(withId(R.id.addReminderFAB)).perform(click())
 
         //RemindersSaveFragment add a location
@@ -126,10 +127,19 @@ class RemindersActivityTest :
 
         //Set a location in SelectLocationFragment
         onView(withId(R.id.map)).perform(click())
+
+
+        //Delay for the map click to fully execute as it was causing problems with AlertDialog
+        runBlocking {
+            delay(500)
+        }
+
         onView(withText("Confirm"))
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
             .perform(click())
+
+        Thread.sleep(300)
 
 
         //Change title and description in SaveReminderFragment

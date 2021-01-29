@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -57,7 +58,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun onLocationSelected(poi: PointOfInterest?): Boolean {
-        if(poi != null) {
+        if (poi != null) {
             _viewModel.selectedPOI.value = poi
             _viewModel.longitude.value = poi.latLng.longitude
             _viewModel.latitude.value = poi.latLng.latitude
@@ -129,15 +130,16 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             .setPositiveButton(
                 getString(R.string.confirm)
             ) { dialog, _ ->
-                val locationSelected = onLocationSelected(poi)
-                if(locationSelected) {
-                    findNavController().navigateUp()
+               val location = onLocationSelected(poi)
+                if(location) {
                     dialog.dismiss()
+                    findNavController().navigateUp()
                 }
             }
             .setNegativeButton(
                 getString(R.string.cancel)
-            ) { dialog, _ ->
+            )
+            { dialog, _ ->
                 marker.remove()
                 dialog?.dismiss()
             }
