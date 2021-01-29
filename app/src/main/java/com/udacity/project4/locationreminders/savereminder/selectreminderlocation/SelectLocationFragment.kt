@@ -23,6 +23,7 @@ import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
@@ -57,12 +58,17 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    private fun onLocationSelected(poi: PointOfInterest?): Boolean {
+    private fun onLocationSelected(marker: Marker?, poi: PointOfInterest?): Boolean {
         if (poi != null) {
             _viewModel.selectedPOI.value = poi
             _viewModel.longitude.value = poi.latLng.longitude
             _viewModel.latitude.value = poi.latLng.latitude
             _viewModel.reminderSelectedLocationStr.value = poi.name
+            return true
+        } else if(marker != null) {
+            _viewModel.longitude.value = marker.position.longitude
+            _viewModel.latitude.value = marker.position.latitude
+            _viewModel.reminderSelectedLocationStr.value = marker.title
             return true
         }
         return false
@@ -103,14 +109,38 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            val latitude = location.latitude
-            val longitude = location.longitude
-            val latLng = LatLng(latitude, longitude)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+            if(location != null) {
+                val latitude = location.latitude
+                val longitude = location.longitude
+                val latLng = LatLng(latitude, longitude)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+            }
         }
 
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style))
         setPoiClickListener(mMap)
+        setMarkerClickListener(mMap)
+    }
+
+    private fun setMarkerClickListener(map: GoogleMap) {
+        map.setOnMapClickListener { latLng ->
+            val snippet = String.format(
+                Locale.getDefault(),
+                "Lat: %1$.5f, Long: %2$.5f",
+                latLng.latitude,
+                latLng.longitude
+            )
+
+            val marker = map.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title("My Location")
+                    .snippet(snippet)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+            )
+
+            createConfirmationDialog(marker, null)
+        }
     }
 
     private fun setPoiClickListener(map: GoogleMap) {
@@ -125,12 +155,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun createConfirmationDialog(marker: Marker, poi: PointOfInterest) {
+    private fun createConfirmationDialog(marker: Marker, poi: PointOfInterest?) {
         val dialog = AlertDialog.Builder(requireActivity())
             .setPositiveButton(
                 getString(R.string.confirm)
             ) { dialog, _ ->
-               val location = onLocationSelected(poi)
+               val location = onLocationSelected(marker, poi)
                 if(location) {
                     dialog.dismiss()
                     findNavController().navigateUp()
