@@ -129,7 +129,7 @@ class RemindersActivityTest :
         onView(withId(R.id.map)).perform(click())
 
 
-        //Delay for the map click to fully execute as it was causing problems with AlertDialog.
+        //Delay for the map click to fully execute as it was causing problems with AlertDialog
         runBlocking {
             delay(500)
         }
@@ -140,7 +140,6 @@ class RemindersActivityTest :
             .perform(click())
 
         Thread.sleep(300)
-
 
         //Change title and description in SaveReminderFragment
         onView(withId(R.id.reminderTitle)).perform(typeText("Test"), closeSoftKeyboard())
